@@ -1,0 +1,5 @@
+name: ${name}
+version: ${version}
+main: io.lightstudios.bank.LightBank
+api-version: '1.21'
+depend: ["lightCore"]
