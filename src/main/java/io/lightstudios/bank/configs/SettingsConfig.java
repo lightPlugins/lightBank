@@ -13,4 +13,8 @@ public class SettingsConfig {
 
     public String language() { return config.getString("language");}
 
+    public long syncDelay() { return config.getLong("multiTransactionSync.delay");}
+    public long syncPeriod() { return config.getLong("multiTransactionSync.period");}
+    public boolean enableDebugMultiSync() { return config.getBoolean("multiTransactionSync.enableDebug");}
+
 }

@@ -1,0 +1,35 @@
+#   ########################################################################################  #
+#
+# This file is generated with LightCore used in LightBank
+#
+#    ___       ___  ________  ___  ___  _________  ________  ________  ________  _______
+#   |\  \     |\  \|\   ____\|\  \|\  \|\___   ___\\   ____\|\   __  \|\   __  \|\  ___ \
+#   \ \  \    \ \  \ \  \___|\ \  \\\  \|___ \  \_\ \  \___|\ \  \|\  \ \  \|\  \ \   __/|
+#    \ \  \    \ \  \ \  \  __\ \   __  \   \ \  \ \ \  \    \ \  \\\  \ \   _  _\ \  \_|/__
+#     \ \  \____\ \  \ \  \|\  \ \  \ \  \   \ \  \ \ \  \____\ \  \\\  \ \  \\  \\ \  \_|\ \
+#      \ \_______\ \__\ \_______\ \__\ \__\   \ \__\ \ \_______\ \_______\ \__\\ _\\ \_______\
+#       \|_______|\|__|\|_______|\|__|\|__|    \|__|  \|_______|\|_______|\|__|\|__|\|_______|
+#
+# -> powered LightBank - A simple and lightweight bank plugin with item vault for your server.
+#    Copyright © 2024 LightStudios
+#
+#   ########################################################################################  #
+#
+language: en
+# This system is designed for efficient and fast data storage (database).
+# HINT: Cached Data Storage will write immediately.
+#       This affects only the database storage.
+#       If you get performance issues, you can increase the period and delay.
+# IMPORTANT: Do not increase these values too much on multiserver setups!
+# Defaults:
+#  period: 500
+#  delay: 500
+multiTransactionSync:
+  # The period in milliseconds for the transaction sync.
+  # How should often check our transaction queue for new transactions and write them in the database.
+  period: 500
+  # The delay in milliseconds for the transaction sync.
+  # How long should the system wait before the first sync.
+  delay: 500
+  # You can enable debug mode to see more information about the current transaction sync.
+  enableDebug: false

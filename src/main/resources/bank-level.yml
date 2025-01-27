@@ -1,0 +1,7 @@
+levels:
+  '1':
+    name: 'Bank Level 1'
+    description: 'The bank is a safe place to store your money.'
+    price: 1000
+    interest: 100
+    capacity: 1000
