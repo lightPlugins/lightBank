@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class BankAccount {
+public class BankData {
 
     private final UUID uuid;
     private String name;
@@ -28,7 +28,7 @@ public class BankAccount {
     private static final TransactionBank transactionManager = new TransactionBank();
 
 
-    public BankAccount(UUID uuid) {
+    public BankData(UUID uuid) {
         this.uuid = uuid;
         this.name = "unknown";
         this.currentCoins = new BigDecimal(0);
@@ -44,7 +44,7 @@ public class BankAccount {
 
         if(LightCore.instance.getSettings().syncType().equalsIgnoreCase("mysql") &&
                 LightCore.instance.getSettings().multiServerEnabled()) {
-            BankAccount result = LightBank.instance.getBankAccountTable().findBankAccountByUUID(uuid).join();
+            BankData result = LightBank.instance.getBankAccountTable().findBankDataByUUID(uuid).join();
             return result.getCurrentCoins().compareTo(amount) >= 0;
         } else {
             return currentCoins.compareTo(amount) >= 0;
@@ -72,7 +72,7 @@ public class BankAccount {
         if(LightCore.instance.getSettings().syncType().equalsIgnoreCase("mysql") &&
                 LightCore.instance.getSettings().multiServerEnabled()) {
             // TODO: Update the data in the database directly
-            LightBank.instance.getBankAccountTable().writeBankAccount(this).join();
+            LightBank.instance.getBankAccountTable().writeBankData(this).join();
         } else {
             if(LightCore.instance.isRedis) { sendUpdateToRedis(); }
             transactionManager.addTransaction(this);
@@ -102,7 +102,7 @@ public class BankAccount {
         // Update the data in the database directly or through the transaction manager (redis)
         if(LightCore.instance.getSettings().syncType().equalsIgnoreCase("mysql") &&
                 LightCore.instance.getSettings().multiServerEnabled()) {
-            LightBank.instance.getBankAccountTable().writeBankAccount(this).join();
+            LightBank.instance.getBankAccountTable().writeBankData(this).join();
         } else {
             if(LightCore.instance.isRedis) { sendUpdateToRedis(); }
             transactionManager.addTransaction(this);
@@ -127,7 +127,7 @@ public class BankAccount {
         // Update the data in the database directly or through the transaction manager (redis)
         if(LightCore.instance.getSettings().syncType().equalsIgnoreCase("mysql") &&
                 LightCore.instance.getSettings().multiServerEnabled()) {
-            LightBank.instance.getBankAccountTable().writeBankAccount(this).join();
+            LightBank.instance.getBankAccountTable().writeBankData(this).join();
         } else {
             if(LightCore.instance.isRedis) { sendUpdateToRedis(); }
             transactionManager.addTransaction(this);

@@ -1,7 +1,7 @@
 package io.lightstudios.bank.storage;
 
 import io.lightstudios.bank.LightBank;
-import io.lightstudios.bank.api.models.BankAccount;
+import io.lightstudios.bank.api.models.BankData;
 import io.lightstudios.core.LightCore;
 import io.lightstudios.core.database.model.DatabaseTypes;
 import org.jetbrains.annotations.NotNull;
@@ -16,16 +16,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class BankAccountTable {
+public class BankDataTable {
 
     private final String tableName = "lightbank_bank";
 
-    public BankAccountTable() {
-        LightBank.instance.getConsolePrinter().printInfo("Initializing BankAccountTable and creating Table...");
+    public BankDataTable() {
+        LightBank.instance.getConsolePrinter().printInfo("Initializing BankDataTable and creating Table...");
         createTable();
     }
 
-    public CompletableFuture<List<BankAccount>> readBankAccount() {
+    public CompletableFuture<List<BankData>> readBankData() {
         return CompletableFuture.supplyAsync(() -> {
             synchronized (this) {
                 String query = "SELECT uuid, name, coins, level FROM " + tableName;
@@ -33,20 +33,20 @@ public class BankAccountTable {
                      PreparedStatement statement = connection.prepareStatement(query);
                      ResultSet resultSet = statement.executeQuery()) {
 
-                    List<BankAccount> bankAccountList = new ArrayList<>();
+                    List<BankData> bankDataList = new ArrayList<>();
                     while (resultSet.next()) {
                         UUID uuid = UUID.fromString(resultSet.getString("uuid"));
                         String name = resultSet.getString("name");
                         BigDecimal coins = resultSet.getBigDecimal("coins");
                         int level = resultSet.getInt("level");
 
-                        BankAccount bankAccount = new BankAccount(uuid);
-                        bankAccount.setCurrentCoins(coins);
-                        bankAccount.setName(name);
+                        BankData bankData = new BankData(uuid);
+                        bankData.setCurrentCoins(coins);
+                        bankData.setName(name);
 
-                        bankAccountList.add(bankAccount);
+                        bankDataList.add(bankData);
                     }
-                    return bankAccountList;
+                    return bankDataList;
                 } catch (Exception e) {
                     LightBank.instance.getConsolePrinter().printError(List.of(
                             "An error occurred while reading bank data from the database!",
@@ -66,7 +66,7 @@ public class BankAccountTable {
         });
     }
 
-    public CompletableFuture<BankAccount> findBankAccountByUUID(UUID id) {
+    public CompletableFuture<BankData> findBankDataByUUID(UUID id) {
         return CompletableFuture.supplyAsync(() -> {
             synchronized (this) {
                 String query = "SELECT uuid, name, coins, level FROM " + tableName + " WHERE uuid = ?";
@@ -80,10 +80,10 @@ public class BankAccountTable {
                             BigDecimal coins = resultSet.getBigDecimal("coins");
                             int level = resultSet.getInt("level");
 
-                            BankAccount bankAccount = new BankAccount(uuid);
-                            bankAccount.setCurrentCoins(coins);
-                            bankAccount.setName(name);
-                            return bankAccount;
+                            BankData bankData = new BankData(uuid);
+                            bankData.setCurrentCoins(coins);
+                            bankData.setName(name);
+                            return bankData;
                         } else {
                             return null; // No player found with the given UUID
                         }
@@ -107,7 +107,7 @@ public class BankAccountTable {
         });
     }
 
-    public CompletableFuture<Integer> writeBankAccount(BankAccount bankAccount) {
+    public CompletableFuture<Integer> writeBankData(BankData bankAccount) {
         return CompletableFuture.supplyAsync(() -> {
             synchronized (this) {
                 String query;
@@ -151,7 +151,7 @@ public class BankAccountTable {
         });
     }
 
-    public CompletableFuture<Boolean> deleteBankAccount(UUID uuid) {
+    public CompletableFuture<Boolean> deleteBankData(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             synchronized (this) {
                 String query = "DELETE FROM " + tableName + " WHERE uuid = ?";
@@ -169,7 +169,7 @@ public class BankAccountTable {
                     return true;
                 } catch (SQLException e) {
                     LightBank.instance.getConsolePrinter().printError(List.of(
-                            "An error occurred while deleting account from the database!",
+                            "An error occurred while deleting data from the database!",
                             "Please check the error logs for more information."
                     ));
                     e.printStackTrace();

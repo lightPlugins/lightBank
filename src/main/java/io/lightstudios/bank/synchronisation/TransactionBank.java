@@ -1,7 +1,7 @@
 package io.lightstudios.bank.synchronisation;
 
 import io.lightstudios.bank.LightBank;
-import io.lightstudios.bank.api.models.BankAccount;
+import io.lightstudios.bank.api.models.BankData;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,9 +28,9 @@ public class TransactionBank {
         scheduler.scheduleAtFixedRate(this::processTransactions, delay, period, TimeUnit.MILLISECONDS);
     }
 
-    public void addTransaction(BankAccount bankAccount) {
+    public void addTransaction(BankData bankData) {
         String timestamp = LocalDateTime.now().format(formatter);
-        transactionQueue.add(new Transaction(bankAccount, timestamp));
+        transactionQueue.add(new Transaction(bankData, timestamp));
     }
 
     private synchronized void processTransactions() {
@@ -45,15 +45,15 @@ public class TransactionBank {
         }
 
         if (lastTransaction != null) {
-            UUID uuid = lastTransaction.bankAccount.getUuid();
-            BigDecimal amount = lastTransaction.bankAccount.getCurrentCoins();
+            UUID uuid = lastTransaction.bankData.getUuid();
+            BigDecimal amount = lastTransaction.bankData.getCurrentCoins();
             String timestamp = lastTransaction.timestamp();
 
             // Write the last transaction to the database asynchronously
             Transaction finalLastTransaction = lastTransaction;
 
             CompletableFuture.runAsync(() -> {
-                LightBank.instance.getBankAccountTable().writeBankAccount(finalLastTransaction.bankAccount).thenAccept(result -> {
+                LightBank.instance.getBankAccountTable().writeBankData(finalLastTransaction.bankData).thenAccept(result -> {
                     if (result > 0) {
                         if(LightBank.instance.getSettingsConfig().enableDebugMultiSync()) {
                             LightBank.instance.getConsolePrinter().printInfo(
@@ -84,6 +84,6 @@ public class TransactionBank {
         }
     }
 
-    private record Transaction(BankAccount bankAccount, String timestamp) { }
+    private record Transaction(BankData bankData, String timestamp) { }
 
 }

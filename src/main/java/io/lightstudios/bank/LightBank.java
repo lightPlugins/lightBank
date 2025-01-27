@@ -3,7 +3,7 @@ package io.lightstudios.bank;
 import io.lightstudios.bank.api.LightBankAPI;
 import io.lightstudios.bank.configs.MessageConfig;
 import io.lightstudios.bank.configs.SettingsConfig;
-import io.lightstudios.bank.storage.BankAccountTable;
+import io.lightstudios.bank.storage.BankDataTable;
 import io.lightstudios.core.util.ConsolePrinter;
 import io.lightstudios.core.util.files.FileManager;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public final class LightBank extends JavaPlugin {
     private LightBankAPI lightBankAPI;
     private ConsolePrinter consolePrinter;
 
-    private BankAccountTable bankAccountTable;
+    private BankDataTable bankAccountTable;
 
     private MessageConfig messageConfig;
     private SettingsConfig settingsConfig;
@@ -36,7 +36,7 @@ public final class LightBank extends JavaPlugin {
         this.consolePrinter.printInfo("Selecting plugin language ...");
         selectLanguage();
 
-        this.bankAccountTable = new BankAccountTable();
+        this.bankAccountTable = new BankDataTable();
 
     }
 
